@@ -1,0 +1,1076 @@
+---
+title: "Introduction to R (in 3 hours or less)"
+subtitle: 'MSc in Statistics 2026/27, Imperial College London'
+author: "Zak Varty"
+format:
+  html:
+    toc: true
+    highlight: tango
+    self-contained: true
+  pdf: default
+format-links: false
+---
+
+
+## What is R? 
+
+R is a _statistical_ programming language
+
+*Why R?*
+
+- prepare you for term 1 module assessments;
+- high-level programming language;
+- specific tools for statistical work;
+- Extensive documentation, code base and support;
+- To add (another) language to your tool belt.
+
+
+## What should you have done already?
+
+- Installed the latest versions of [R](https://cran.r-project.org/) and [RStudio](https://posit.co/download/rstudio-desktop/) using sections 4-8 of [Happy Git with R](https://happygitwithr.com/install-intro) [Required. We do not support legacy code.]
+
+- Followed instructions to [link RStudio and GitHub](https://happygitwithr.com/install-intro) using Sections 9-13 of [Happy Git with R](https://happygitwithr.com/connect-intro). [Optional, makes life easier]
+
+## Today's aims
+
+- use R as a calculator, programming language and statistical programming language.
+- write R code to implement standard scientific computing tasks and data analyses.
+- run R code interactively or as a script and choose which is more appropriate.
+- Produce, customise and save figures.
+
+## Modelling our Git Workflows 
+
+(Optional)
+
+- Set up a Github repository for today's workshop `introduction_to_R/`. 
+
+- Clone to your machine
+
+- Download the `intro-to-R.qmd` file from blackboard
+
+- Add, commit and push. 
+
+# 1. R for Data Analytics
+
+## Putting the Data in Data Science
+
+R is a statistical programming language. That means it is great for working with data. [Menti](https://www.menti.com/al7c32gaz6nd)
+
+> What types of data do you know of already? 
+
+> What data structures do you know of already? (structures to store, retreive and operate on that data)
+
+
+```{r}
+#| echo: false
+#| out-width: "20%" 
+#| fig-align: center
+knitr::include_graphics(path = "26_27_menti_qr.png")
+```
+> What types of data do you know of already? 
+
+> What data structures do you know of already? (structures to store, retreive and operate on that data)
+
+
+## Types of data in R 
+
+You can tell the type of a data object using the `class()` function. Some common data types are: 
+
+- Integer: `1`, `32542`, `-7`, `0`
+
+- Numeric: `3.14`, `0.0`, `1.0`, `9.99999`, `-7.89`
+
+- Logical: `TRUE`, `FALSE`, `class(TRUE)`
+
+- Character: `"apple"`, `"1"`, `'carrot'`, `'"quoted speach"'` 
+
+- Factor (categorical): `factor(c("red", "green", "blue", "green"))`
+
+- Factor (ordinal): `factor(c("medium", "small", "large", "small"))`
+
+- Missing: `NA`
+
+
+There are also more esoteric ones that you learn as you need them.
+
+You can convert between types of data using e.g. `as.numeric()`, `as.logical()` or `as.factor()`.
+
+## R as a Calculator 
+
+The simplest way you can use R is as a calculator. 
+
+```{r}
+1 + 2
+1 - 2
+1 * 2
+1 / 2
+```
+
+It has lots of built-in mathematical functions and some built-in constants too.
+
+```{r}
+exp(1)
+
+sin(pi / 2)
+
+log(2)    # natural logarithm by default
+log10(2)  # base 10 is available
+```
+
+# Data Structures: sticking data together
+
+## Vectors
+
+Vectors _concatenate_ lots of values of the same type in one dimension.
+
+```{r}
+c(1,2,3,4)
+0:5
+
+c("apple", "banana", "carrot")
+
+c(TRUE, FALSE, FALSE, TRUE, FALSE, FALSE)
+```
+
+Assignment allows you to store and recall values and is done with an "arrow" `<-`. 
+
+```{r}
+one <- 1 
+two <- 2 
+
+one 
+two 
+one + two
+```
+
+You can store vectors too. To extract or replace elements of them, use square brackets. 
+
+> Pythonistas take note: R uses natural indexing! 
+
+```{r}
+foods <- c("apple", "banana", "carrot")
+foods
+foods[1]
+
+fruits <- foods 
+fruits[3] <- "celementine"
+fruits
+
+# drop elements by using negative integers
+foods[-3]
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+What value is contained in the last element of the `foods` vector? 
+
+- `"carrot"`
+- `"clementine"` 
+:::
+
+:::{.callout-tip title="Test your understanding"}
+
+What do you expect the output to be?
+
+```{r}
+#| eval: false 
+# a
+1 + 1:3
+
+# b
+c(1, 2, 3, 4, 5, 6) + c(0, 1)
+
+# c
+c(1, 2, 3, 4, 5) + c(0, 1)
+```
+:::
+
+Having data stored in a vector allows us to easily calculate summary statistics.
+
+```{r}
+x <- 1:10 
+```
+
+```{r}
+length(x)
+```
+
+```{r}
+sum(x)
+```
+
+```{r}
+mean(x)
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+How would you find the median of `x`? How about the 90th percentile? 
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Use `c()` to add a missing value to the start of the vector `x`. How does that impact the previous summary statistics? 
+:::
+
+```{r}
+# your code goes here
+``` 
+
+## Matricies and Arrays 
+
+You can also store numbers in two dimensional arrays (matrices). 
+This can make your code very efficient if it can be represented as a series of matrix operations. 
+
+```{r}
+A <- matrix(1:9, nrow = 3)
+A
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Make a 3 by 2 matrix $B$ containing the numbers 1 to 6.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Use `%*% to calculate $AB$.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Create a matrix $C$ as defined below and calculate its inverse using `solve()`. Store $C^{-1}$ assign the result to `C_inv` 
+:::
+
+$$
+C = \begin{bmatrix}
+1 & 1 & 0 \\
+0 & 1 & 1 \\
+0 & 0 & 1
+\end{bmatrix}.
+$$ {#eq-matrix-c}
+
+
+```{r}
+#your code goes here
+```
+
+You will often want to calculate row-wise or column-wise summary statistics of matrices and other grid-like data structures. 
+
+Some summary statistics have nice built-in functions such as `rowSums()` and `colSums()`. For less common summaries we can use the `apply()` function to _apply_ another function to each row of column of a matrix.  
+
+```{r}
+rowSums(A)
+```
+
+```{r}
+apply(X = A, MARGIN = 1, FUN = sum)
+```
+
+```{r}
+colMeans(A)
+```
+
+```{r}
+apply(X = A, MARGIN = 2, FUN = mean)
+```
+
+This is the first time we have seen a function with multiple inputs (arguments). These can be given without names in the default order or in any order with names.
+
+:::{.callout-tip title="Test your understanding"}
+
+Calculate the column means of $C$ and the row medians of $C^{-1}$.
+:::
+
+```{r}
+# Your code goes here
+```
+
+:::{.callout-tip}
+
+In RStudio you can preview the inputs of a function by typing its name with an open parenthesis and then pressing tab. (e.g. `apply(` + `tab`.) 
+
+You can then use the arrow keys to move through the inputs. 
+
+To get more detailed information on a function you can look at its documentation. 
+
+To show the documentation for a function, put a question mark before its name. `?apply`
+:::
+
+:::{.callout-tip title="Test your understanding"}
+
+- What is the second argument of `max()` and what does it do? 
+
+- Look at the documentation for `rowSums()`. What subtle difference is there between `rowSums(A)` and `apply(X = A, MARGIN = 1, FUN = sum)`?
+:::
+
+## Data Frames 
+
+So far we have focused on collecting together data that is all of the same type. A `data.frame` allows you to gather data of different types. 
+
+Usually each row will represent one observational unit (a person, a penguin, a city) and each column represents a measured quantity (age, gender, sex, species, population, capital status). 
+
+```{r}
+grades <- data.frame(student_id = 1:3, score = c(90, 85, 88))
+grades 
+```
+
+```{r}
+# Avoid very long lines by using line breaks
+grades <- data.frame(
+  student_id = 1:6,
+  score = c(90, 85, 88, 52, 66, 41),
+  class = c("Distinction", "Distinction", "Distinction", "Pass", "Merit", "Fail"),
+  pass = c(rep(TRUE, 5), FALSE)
+)
+
+grades
+```
+
+We can extract individual rows using their row and column indices 
+
+```{r}
+# first row
+grades[1, ]
+```
+
+```{r}
+# second column 
+grades[ ,2]
+```
+
+```{r}
+# first row of second column 
+grades[1, 2]
+```
+
+Or using the column names: 
+
+```{r}
+grades$class 
+```
+
+```{r}
+grades[ ,"class"]
+```
+
+```{r}
+grades[, c("score", "class")]
+```
+
+Or using logical conditions: 
+
+```{r}
+grades[grades$pass == FALSE, ]
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Subset the `grades` data frame to extract the id and score of the students whose grade is at least 87.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Is there any difference between `grades$class` and `grades[ ,"class"]`? 
+:::
+
+```{r}
+# your code goes here
+```
+
+You can add elements to a data.frame by assigning them to non-existent columns or rows. (Be careful of the latter!) 
+
+```{r}
+grades$gender <- rep("Female", 6)
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Make up a vector with an additional entry and try adding it as a 7th row of `grades`. What happens? Why do you think that happens? 
+:::
+
+## Lists 
+
+Lists generalise data.frames by allowing us to have entries of different data types _and_ different lengths. 
+
+```{r}
+zv <- list(
+  forename = "Zak", 
+  surname = "Varty",
+  years_at_imperial = 4, 
+  modules = c('Data Science', "Ethical MLDS"))
+```
+
+You can even get wild and have nested lists, where elements of the list are themselves lists! 
+
+```{r}
+zv <- list(
+  forename = "Zak", 
+  surname = "Varty",
+  years_at_imperial = 4, 
+  modules = list(
+    data_science = list(programme = "MSc Stats", 
+                        students = 85,
+                        online = FALSE,
+                        room = "HXLY 139"),
+    ethical_mlds = list(programme = "MSc MLDS",
+                        students = 95,
+                        online = TRUE))
+  )
+```
+
+R also has some other, application specific, data structures but under the hood these are usually just lists.  
+
+## Reading and Writing Data 
+
+If we have tabular data, a comma separated value (csv) file is one of the most accessible ways to store it. We can create files using `write.csv()`
+
+```{r}
+write.csv(grades, "grades.csv")
+```
+
+We can then remove it from our workspace 
+
+```{r}
+rm(grades)
+```
+
+and re-load it from the CSV we just created 
+
+```{r}
+grades <- read.csv("grades.csv")
+```
+
+
+If we want to save R objects in their existing form we can use an R Data Serialised (RDS) file. This lets us save and load more complicated data structures but at the expense of these being less accessible. 
+
+(RDS files are not human-readable and are not easily ported between programming languages.)
+
+:::{.callout-tip title="Test your understanding"}
+
+Follow the previous example to use `saveRDS()` and `readRDS()` to save the `zv` nested list to a file, remove it from the workspace and reload it from the file you just created. 
+:::
+
+```{r}
+# your code goes here
+```
+
+
+:::{.callout-warning}
+> It is important to be aware of where in your file system R is running. This is the so-called "working directory" and file paths are relative to this location. Use `pwd` in the terminal or `getwd()` in R to find this out.
+>
+> If your code is run from a notebook document like Rmd, qmd and jupytper notebook code and any file paths will be run from the location of the notebook.
+>
+> If you are editing a notebook in RStudio, the working directory for your console might not be the same as the location of the notebook. While you can use `setwd()` to change this, it is much better to design your projects to use [portable file paths](https://eds-notes.zakvarty.com/103-workflows-organising-your-code#structuring-r-script-headers). The `{here}` package can be helpful for this, check out the [getting started](https://here.r-lib.org/articles/here.html) documentation.
+:::
+
+# 2. R as a statistical programming language 
+
+## Referencing statistical distributions
+
+### Probability Density / Mass Functions
+
+Probability density/mass functions can be referenced using functions with a `d` prefix. (e.g. `dnorm()`, `dgamma()`, ...)
+
+```{r}
+dnorm(x = 0, mean = 0, sd = 1)
+
+# sanity check (our first unit test!)
+1/(sqrt(2 * pi))
+```
+
+We can pass vectors as inputs. Smaller inputs will be "recycled"
+
+```{r}
+dnorm(x = 1:6, mean = 1:3, sd = 1:2)
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Describe to your neighbour which probability density functions are being referenced in the above code. 
+:::
+
+This same feature allows us to easily plot probability density functions.
+
+```{r}
+x <- seq(from = -3,to = 3, by = 0.01)
+density <- dnorm(x = x, mean = 0 , sd = 1)
+
+plot(x = x, y = density, type = "l")
+```
+
+### Probability functions
+
+Probability functions take as input a value and return the corresponding quantile level of the distribution ($x \rightarrow \Pr(X \leq x)$). 
+
+```{r}
+# check against some reference values
+pnorm(q = -1.64, mean = 0, sd = 1)
+pnorm(q = 0, mean = 0, sd = 1)
+pnorm(q = 1.96, mean = 0, sd = 1)
+```
+
+These functions can be used to easily plot cumulative distribution functions
+
+```{r}
+x <- seq(from = -3,to = 3, by = 0.01)
+probability <- pnorm(q = x, mean = 0 , sd = 1)
+
+plot(x = x,
+     y = probability,
+     type = "l",
+     main = "CDF of standard Normal distribution")
+```
+
+Finally, quantile functions take a probability and return the corresponding quantile of that distribution. 
+
+```{r}
+p <- ppoints(1001)
+quantile <- qnorm(p = p, mean = 0, sd = 1)
+
+plot(
+  x = p,
+  y = quantile,
+  type = "l",
+  main = "Inverse CDF of standard Normal distribution")
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Make similar plots for the standard exponential distribution. 
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+
+- What do you think are the names of the equivalent functions for the continuous uniform distribution? 
+- Why might one of these names be confusing?
+:::
+
+## Simulating from statistical distributions 
+
+We can simulate a realisation of a random variable by using the equivalent functions with an "r" prefix. We could generate a single random variate from the standard normal distribution.
+
+```{r}
+rnorm(n = 1, mean = 0, sd = 1)
+```
+
+To simulate lots of random variates we increase the sample size, `n`.
+
+```{r}
+rnorm(n = 5, mean = 1, sd = 1)
+```
+
+Similar to previous functions we can vectorise the inputs.
+
+```{r}
+rnorm(n = 5, mean = 1:5, sd = 1)
+```
+
+But if we re-run the same line of code we get a different set of outputs. 
+
+```{r}
+rnorm(n = 5, mean = 1:5, sd = 1)
+```
+
+This is exactly what we want but is terrible for reproducibility. What if your work is reviewed and the conclusions no longer match the simulated data?
+
+We can set the _seed_ of our random number generator to avoid this problem. Suppose in our simulations we want to generate two sets of random numbers. 
+
+```{r}
+set.seed(1234)
+rnorm(n = 5, mean = 1:5, sd = 1)
+rnorm(n = 5, mean = 1:5, sd = 1)
+```
+
+We get different numbers each time we run `rnorm()` but if we rerun the entire code we will get the same result.
+
+```{r}
+set.seed(1234)
+rnorm(n = 5, mean = 1:5, sd = 1)
+rnorm(n = 5, mean = 1:5, sd = 1)
+```
+
+You can think of the seed as the starting point in a long list of random numbers and you are choosing which entry to start reading from.
+
+Randomness is inherent to a lot of the work we do as data scientists but making the randomness reproducible by using a seed lets us act more like sof:
+
+> __Reproducibile Results:__ Do you get the exact same results each time code is run?  
+
+Benefits of reproducible results: 
+
+  - _Debugging your code_ is much easier 
+  - _Testing your code_ is much easier
+  - _Comparing methods_ is more robust
+  - _Convincing others_ is much simpler.
+
+:::{.callout-warning}
+## We are data scientists, not cherry pickers!
+
+One caveat is to be wary of "seed hacking". While checking that your results stay the same numerically for a given seed, the qualitative conclusions you draw should be stable across a range of seed values.
+:::
+
+:::{.callout-tip title="Test your understanding"}
+
+a) Without setting a seed, simulate 2 datasets. Each should be a different size and be drawn from two Normal distributions with different parameters. 
+
+b) Use `qqnorm()` to create a plot comparing the quantiles of your samples to the quantiles of the best-fitting Normal distribution. 
+
+c) Rerun your previous code and see the plots change. 
+
+d) Add a seed to your code and check that you get the same plots every time. 
+
+e) Use `hist()` to create a histogram for each of your samples.
+
+:::
+
+```{r}
+# your code goes here
+```
+
+
+
+
+# 3. Don't Repeat Yourself! 
+
+## DRY - For Loops 
+
+Sometimes you have to do things over and over and over and over and over....
+
+If there is structure to what you are doing, you don't need to repeat yourself in code. 
+
+```{r}
+# The dumb way
+print("a")
+print("b")
+print("c")
+print('...')
+```
+
+```{r}
+# The DRY way
+for (i in 1:26){
+  print(letters[i])
+}
+```
+
+Here `i` is a _dummy variable_. It exists only within that for look and progresses through the values of `c(1, 2, ..., 26)` as the code in curly brackets gets executed for each of these values.
+
+Since `i` is a dummy variable, we can call it anything we like. A more informative way of writing the same code would be:
+
+```{r}
+for (letter in letters) {
+  print(letter)
+}
+```
+
+> __Note:__ For loops are relatively slow compared to vectorisation. They should mainly be used when there is a requirement for things to be done sequentially.
+
+:::{.callout-tip title="Test your understanding"}
+
+Write a loop that prints whether each number from 1 to 5 is even or odd.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+A useful helper functions to use with for loops is `seq_along()`. What do you think it does? 
+:::
+
+
+## DRY - While Loops 
+
+One downside to `for` loops is that, before you run the code, you either need an object to iterate along or to know how many times to repeat the code within the curly braces. 
+
+`while`-loops avoid this need. They will repeat the bracketed code until the condition you pre-specify is no longer `TRUE`.
+
+```{r}
+j <- 12 
+i <- 0
+
+while (j > 0.002) {
+  j <- j / 3
+  i <- i + 1
+  print(j)
+}
+```
+
+You can use any sort of Boolean condition as your condition:
+
+- Comparisons: `<`, `<=`, `==`, `>=`, `>`, `!==`. 
+- Functions which evaluate to `TRUE` or `FALSE`: `%in%` ,`is.na()`
+
+:::{.callout-warning} 
+There is danger here. If the condition is always `TRUE` you will be stuck in an infinite loop and your code will never stop running. (Note: this is not as scary as it sounds!)
+:::
+
+```{r}
+#| eval: false 
+j <- 12 
+i <- 0
+
+while (j > 0.002) {
+  i <- i / 3
+  j <- j + 1
+  Sys.sleep(1)         # slow things down 
+  print(j)
+}
+```
+
+
+## DRY - Control Flow 
+
+While loops lead us nicely into flow control. This is where under different conditions you want to take different actions. `if` and `else` allow you to do this and take the same structure as `while`. 
+
+```{r}
+#| eval: false
+a <- 1 
+if (a > 2) {print(a)}
+if (a > 0) {print("a is positive")}
+if (a == 0) {print("a is neither postive nor negative")}
+if (a < 0) {print("a is negative")}
+```
+
+```{r}
+#| eval: false
+a <- 1 
+if (a > 2) {
+  print(a)
+} else if (a > 0) {
+  print("a is positive")
+} else if (a < 0) {
+  print("a is negative")
+} else {
+  print("a is neither positive nor negative")
+}
+```
+
+Multiple-case flow control like this can be hard to read and write but they do have a computational benefit if one of the `if` conditions is expensive to evaluate and sometimes having a catch-all `else` term is useful for handling unexpected situations gracefully. 
+
+:::{.callout-tip title="Test your understanding"}
+
+Can you think of an example where the second code would work but the first would not?
+:::
+
+:::{.callout-tip title="Test your understanding"}
+
+Write a loop that prints whether each number from 1 to 5 is even or odd. You might find `%%` useful for this.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Write code that picks a number $N$ between 5 and 10 (inclusive) uniformly at random. Write a loop that prints whether each number from n to 10 is even or odd.
+:::
+
+```{r}
+# your code goes here
+```
+
+:::{.callout-tip title="Test your understanding"}
+
+Write code that starts with an empty vector `c()` and simulates exponential random variates until their sum exceeds 10. Your code should return the sequence of partial sums. 
+:::
+
+```{r}
+# your code goes here
+```
+
+
+## DRY Functions 
+
+In data science you’ll often find yourself repeating the same task again and again — maybe calculating a summary statistic, making a specific type of plot, or pre-processing multiple datasets in the same way.
+
+This can lead to a lot of repeated code with only small changes. This is:
+
+- a waste of your time to type by hand, 
+- an easy way to make mistakes by copying and pasting,
+- a lot of effort to go back and fix a typo in every repetition.
+
+Instead we can write a function to capture the shared structure of the repeated code.
+
+```{r}
+# function with one input
+square <- function(x) {
+  return(x^2)
+}
+
+# function with two inputs
+add <- function(x, y){ 
+  return(x + y)
+}
+```
+
+Suppose we have repetitious code like that below, which pads each vector with `NA` values.
+
+```{r}
+# extract columns as vectors
+class <- grades$class
+gender <- grades$gender
+pass <- grades$pass
+
+# add leading and trailing NA values
+class_padded <- c(NA, NA, grades$class, NA)
+gender_padded <- c(NA, NA, grades$gender, NA)
+pass_padded <- c(NA, NA, grades$pass, NA)
+
+```
+
+:::{.callout-note title="Example"}
+Write a function `pad_with_NA` to streamline this code. `pad_with_NAs(x, n_left, n_right)` It should take 3 inputs:
+
+- `x` the vector to be padded
+- `n_left` the number of `NA` values to be added before the vector 
+- `n_right` the number of `NA` values to be added after the vector.
+:::
+
+The very simplest implementation would be something like
+
+```{r}
+pad_with_NAs <- function(x, n_left, n_right){
+    c(rep(NA, n_left), x, rep(NA, n_right))
+}
+```
+
+
+We might also want to add some checks on the inputs the user supplies.
+
+```{r}
+pad_with_NAs <- function(x, n_left, n_right){
+    
+    stopifnot(n_left >= 0)
+    stopifnot(n_right >= 0)
+    stopifnot(class(x) %in% c("character", "complex", "integer", 
+        "logical", "numeric", "factor"))
+
+    c(rep(NA, n_left), x, rep(NA, n_right))
+}
+
+```
+
+We can then replace our previous code with the following.
+
+```{r}
+# add leading and trailing NA values
+class_padded  <- pad_with_NAs(grades$class,  n_left = 2, n_right = 1)
+gender_padded <- pad_with_NAs(grades$gender, n_left = 2, n_right = 1)
+pass_padded   <- pad_with_NAs(grades$pass,   n_left = 2, n_right = 1)
+```
+
+
+> **Note:** For such a simple operation, this might not seem worthwhile. However, for more complicated operations it can reduce the overall amount of code needed or make the purpose of the code much more clear. 
+
+:::{.callout-tip title="Test your understanding"}
+How could we further reduce repetition in this example?
+:::
+
+:::{.callout-tip title="Test your understanding"}
+`airquality` is a dataset that is included in the base R installation.
+
+Write a function `farenheit_to_centigrade()` and use this to add a `Temp_C` 
+column to the `airquality` data frame. _Note:_ $C = (F - 32) \times \frac{5}{9}$.
+:::
+
+```{r}
+airquality <- datasets::airquality
+
+farenheit_to_centigrade <- function(){
+# YOUR CODE GOES HERE
+}
+
+# YOUR CODE GOES HERE
+```
+
+Function definitions can get quite long and messy. In real-world applications we usually keep them in their own R file named after the function. This keeps any notebooks or analysis scripts easy to read and makes the relevant function definition easy to find. 
+
+:::{.callout-tip title="Test your understanding"}
+- Make a new subfolder called `src` in the same directory as this notebook.
+- Create two files in that subfolder called `pad_with_NAs.R` and `farenheit_to_centigrade.R`.
+- Copy the function definitions into each R file.
+:::
+
+We can now remove the functions from our working environment and load them from their source code. 
+
+```{r}
+rm("pad_with_NAs", "farenheit_to_centigrade")
+```
+
+```{r}
+source("src/farenheit_to_centigrade.R")
+source("src/pad_with_NAs.R")
+```
+
+Building up a collection of function definitions like this can:
+
+- simplify the code you present in an analysis
+- save you a lot of time writing repeated code
+- allow you to share functions across notebooks or projects
+- allow you to share your functions with other people.
+
+## DRY - Use Packages
+
+The last part of this is where `libraries` or `packages` come in. These are ways for people to share their functions, code or data with other people. They are just collections of files like `src/padd_with_NAs.R`, designed to extend to capabilities of base R. 
+
+Making your own R package is surprisingly easy. See [https://r-pkgs.org/](https://r-pkgs.org/) for more details.
+
+Some common packages you might have heard about are `{ggplot2}` for data visualisation, `{dplyr}` for data wrangling or `{ts}` for time-series analyses. 
+
+```{r}
+#| eval: false
+# download package files from CRAN to your computer
+install.packages("ggplot2")
+```
+
+```{r}
+#| eval: false
+# quietly load the functions and data for use in R
+library("ggplot2")
+```
+
+```{r}
+# access a dataset from that package
+head(ggplot2::diamonds, n = 4)
+```
+
+One thing that good packages have in abundance is documentation. 
+
+__Quiz:__ run `?diamonds` to learn about the diamonds dataset. 
+
+There is a package called `{ROxygen2}` that is full of useful functions to help you document your own code. 
+
+```{r}
+#| eval: false
+install.packages("roxygen2")
+``` 
+
+
+- With cursor inside function go to the menu and click Code > Insert Roxygen Skeleton
+- Keyboard short cut: `cmd` + `option` + `shift` + "r" or `crtl` + `option` + `shift` + "r".
+
+```{r}
+pad_with_NAs <- function(x, n_left, n_right){
+  
+  stopifnot(n_left >= 0)
+  stopifnot(n_right >= 0)
+  stopifnot(class(x) %in% c("character", "complex", "integer", 
+                            "logical", "numeric", "factor"))
+  
+  c(rep(NA, n_left), x, rep(NA, n_right))
+}
+```
+
+This should get you something like this.
+
+```{r}
+#' Title
+#'
+#' @param x 
+#' @param n_left 
+#' @param n_right 
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+pad_with_NAs <- function(x, n_left, n_right){
+  
+  stopifnot(n_left >= 0)
+  stopifnot(n_right >= 0)
+  stopifnot(class(x) %in% c("character", "complex", "integer", 
+                            "logical", "numeric", "factor"))
+  
+  c(rep(NA, n_left), x, rep(NA, n_right))
+}
+```
+
+You just need to fill out relevant fields to tell someone else (or future you) what the function does, it's expected inputs and outputs.
+
+```{r}
+#' Add NAs to a vector
+#'
+#' @param x Vector to which NAs will be added.
+#' @param n_left Number of NAs to add before x.
+#' @param n_right Number of NAs to add after x.
+#'
+#' @return A vector containing x with the requested number of NA values before and after.
+#'
+#' @export
+#' @examples
+#' pad_with_NAs(1:5, n_left = 0, n_right = 3)
+#' pad_with_NAs(c("spider", "mouse", "cat", "dog"), n_left = 1, n_right = 2)
+#'
+pad_with_NAs <- function(x, n_left, n_right){
+  
+  stopifnot(n_left >= 0)
+  stopifnot(n_right >= 0)
+  stopifnot(class(x) %in% c("character", "complex", "integer", 
+                            "logical", "numeric", "factor"))
+  
+  c(rep(NA, n_left), x, rep(NA, n_right))
+}
+```
+
+:::{.callout-tip title="Test your understanding"}
+Add this documentation to `pad_with_NAs.R` and add your own documentation for to `farenheit_to_centigrade.R`. 
+:::
+
+# 4. Putting it all together
+
+## Where You Code 
+
+| Property              | Notebook | Script | Command Line |
+|-----------------------|:--------:|:------:|:------------:|
+| reproducible          |    \~    |   ✓    |      X       |
+| readable              |    \~    |   ✓    |      \~      |
+| self-documenting      |    ✓     |   X    |      X       |
+| in production         |    X     |   ✓    |      \~      |
+| ordering / automation |    \~    |   ✓    |      \~      |
+
+
+## Putting it all together
+
+1. Install the `palmerpenguins` package and load the `penguins` dataset it contains.
+2. Add an additional column `TRUE`/`FALSE` values indicating whether there are missing values for each penguin. 
+3. Find the average bill length and flipper length for each species of penguin.
+4. Write a function `species_mean()` that calculates the mean of a numeric variable for each species. Document it with Roxygen2-style comments.
+5. Create a scatter plot of flipper length vs. body mass, with different symbols and colours for each species.
+6. Add points to your scatter plot to show the species-specific mean values, using a different shape or colour.
+
+
+## Where to learn more?
+
+- Drop-in Session 15:00-15:30 today, Huxley 533.
+
+- [Effective Data Science Notes](https://eds-notes.zakvarty.com/) - Chapters 1 - 4.
+
+- [Telling Stories With Data](https://tellingstorieswithdata.com/20-r_essentials.html) - R essentials 
+
+- GTA support during Statistics Clinics
+
+- Each other!
